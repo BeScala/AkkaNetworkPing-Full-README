@@ -5,7 +5,7 @@ In the initial version, only an Actorsystem (name *Akka-Network-Ping*) is create
 
 No Actors are created yet, but there's a command line parser that accepts the following commands from the command-line:
 
-	[pingerCount] pi|ping [pingInterval] [pingCount]
+	[pingerCount] pi|ping [pingCount] [pingInterval]
 	s|status
 	q|quit
 
@@ -66,6 +66,8 @@ This code implements a solution for the stated tasks. However, some questions ma
 
 - In the current application, there's an obvious memory leak: ```Ping``` actors are created and, after having performed their task, are never stopped...
 
+- A number of tests have been added to the project that test the functionality of the ```Pinger``` and ```PingServer``` actors.
+
 ##Exercise 2 - Implementing pingInterval
 
 1. Change ```Pinger``` to send the ```Ping``` messages at the specified interval. Have a look at an actor's access to the scheduler (```context.system.scheduler.*```). Note that we always send ```pingCount``` messages, i.e. regardless of the number of ```Response``` messages that are sent back in response.
@@ -116,7 +118,7 @@ Let's make ```PingServer``` a bit unreliable by having it not send a reply to a 
 
 ##Exercise 5 - Solution & discussion
 
-After the modification, we see that, in case of dropped ``Ping``` messages, the bookkeeping of the ```Pinger``` no longer fits. As a consequence, it never stop because it will keep waiting for responses that will never arrive.
+After the modification, we see that, in case of dropped ```Ping``` messages, the bookkeeping of the ```Pinger``` no longer fits. As a consequence, it never stop because it will keep waiting for responses that will never arrive.
 
 Observe this by running the application a number of times, setting ```reliability``` to for example 60 until at least one message is dropped.
 
@@ -211,7 +213,7 @@ You might extend ```AkkaNetworkPing``` by:
 - Keep track of the number of ping requests, actual pings sent, number of timeouts.
 - Report of the stats by extending the stats command
 - Implement ```Pinger```, ```PingerWorker``` and ```PingServer``` using Akka FSM
-- Adding tests...
+- Adding more tests...
 - Experiment with ```ask```/```pipeTo```
 - ...
 
